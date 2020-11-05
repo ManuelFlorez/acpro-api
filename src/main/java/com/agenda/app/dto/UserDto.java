@@ -4,17 +4,17 @@ import lombok.Builder;
 import lombok.Data;
 
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotEmpty;
 
 @Builder
 @Data
 public class UserDto {
-    @NotNull
-    @Email
+    @NotEmpty(message = "Debe ingresar un email")
+    @Email(message = "debe ingresar un email que sea valido")
     private String email;
-    @NotNull
+    @NotEmpty(message = "debe ingresar un código")
     private String code;
-    @NotNull
+    @NotEmpty(message = "debe ingresar una password")
     private String password;
     private String rol;
 
