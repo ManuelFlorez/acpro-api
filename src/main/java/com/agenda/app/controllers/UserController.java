@@ -2,16 +2,18 @@ package com.agenda.app.controllers;
 
 import com.agenda.app.dao.UserDao;
 import com.agenda.app.dto.ResponseDto;
+import com.agenda.app.dto.payload.UsuarioEditPerfil;
+import com.agenda.app.dto.payload.UsuarioRecoverPassword;
 import com.agenda.app.dto.payload.UsuarioRegistro;
 import com.agenda.app.entity.User;
 import lombok.extern.log4j.Log4j2;
-import org.aspectj.weaver.Iterators;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
 
 @Log4j2
 @RestController
@@ -35,6 +37,8 @@ public class UserController {
         user = new User();
         user.setCorreo(usuarioRegistro.getCorreo());
         user.setClave(usuarioRegistro.getClave());
+        user.setCodigo("");
+        user.setRol(usuarioRegistro.getTipoUsuario());
         userDao.save(user);
         return ResponseDto.ok("se ha creado el nuevo usuario");
     }
@@ -47,4 +51,34 @@ public class UserController {
         }
         return ResponseDto.ok(user);
     }
+    
+    @PostMapping("/recoverpassword")
+    public ResponseDto<String> recoverpassword(@RequestBody UsuarioRecoverPassword usuarioRecoverPassword) {
+        User user = userDao.findByCorreo(usuarioRecoverPassword.getCorreo());
+        if (user == null) {
+            return ResponseDto.ok("Ya esta registrado este email: " + usuarioRecoverPassword.getCorreo(), false);
+        }
+        user.setClave(usuarioRecoverPassword.getClave());
+        userDao.save(user);
+        return ResponseDto.ok("Se actualizo la clave");
+    }
+
+    @PostMapping("/editarPerfil")
+    public ResponseDto<String> editarPerfil(@RequestBody UsuarioEditPerfil usuarioEditPerfil) {
+        User user = userDao.findByCorreo(usuarioEditPerfil.getEmail());
+        if (user == null) {
+            return ResponseDto.ok("No se encontro el usuario", false);
+        }
+        user.setUsername(usuarioEditPerfil.getUsername());
+        user.setCorreo(usuarioEditPerfil.getEmail());
+        user.setNombres(usuarioEditPerfil.getNombres());
+        user.setApellidos(usuarioEditPerfil.getApellidos());
+        user.setDireccion(usuarioEditPerfil.getDireccion());
+        user.setCiudad(usuarioEditPerfil.getCiudad());
+        user.setPais(usuarioEditPerfil.getPais());
+        user.setDescripcion(usuarioEditPerfil.getDescripcion());
+        userDao.save(user);
+        return ResponseDto.ok("Se actualizo la información de perfil");
+    }
+    
 }
