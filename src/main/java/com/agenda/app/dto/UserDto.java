@@ -12,13 +12,11 @@ public class UserDto {
     @NotEmpty(message = "Debe ingresar un email")
     @Email(message = "debe ingresar un email que sea valido")
     private String email;
-    @NotEmpty(message = "debe ingresar un código")
-    private String code;
     @NotEmpty(message = "debe ingresar una password")
     private String password;
     private String rol;
 
     public boolean equals(UserDto user) {
-        return user.getCode().equals(code) && user.getEmail().equals(email) && user.getPassword().equals(password);
+        return user.getEmail().equals(email) && user.getPassword().equals(password);
     }
 }

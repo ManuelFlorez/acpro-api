@@ -50,4 +50,7 @@ public class User {
 
     @Column(name = "usua_reg_date")
     private Timestamp fechaIngreso;
+
+    @Column(name = "usua_estado")
+    private String estado;
 }
