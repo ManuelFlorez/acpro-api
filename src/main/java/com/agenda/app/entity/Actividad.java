@@ -22,28 +22,28 @@ public class Actividad {
     @JoinColumn(name = "tire_id")
     private TipoResponsable tipoResponsable;
 
-    @JoinColumn(name = "acti_nombre_responsable")
+    @Column(name = "acti_nombre_responsable")
     private String nombreResponsable;
 
-    @JoinColumn(name = "acti_descripcion")
+    @Column(name = "acti_descripcion")
     private String descripcion;
 
-    @JoinColumn(name = "acti_ciudad")
+    @Column(name = "acti_ciudad")
     private String ciudad;
 
-    @JoinColumn(name = "acti_pais")
+    @Column(name = "acti_pais")
     private String pais;
 
-    @JoinColumn(name = "acti_numero_estudiantes")
-    private String numeroEstudiantes;
+    @Column(name = "acti_numero_estudiantes")
+    private Integer numeroEstudiantes;
 
-    @JoinColumn(name = "acti_numero_docentes")
-    private String numeroDocentes;
+    @Column(name = "acti_numero_docentes")
+    private Integer numeroDocentes;
 
-    @JoinColumn(name = "acti_numero_personas")
-    private String numeroPersonas;
+    @Column(name = "acti_numero_personas")
+    private Integer numeroPersonas;
 
-    @JoinColumn(name = "acti_numero_personal_administrativo")
-    private String numeroPersonasAdministrativo;
+    @Column(name = "acti_numero_personal_administrativo")
+    private Integer numeroPersonasAdministrativo;
 
 }
