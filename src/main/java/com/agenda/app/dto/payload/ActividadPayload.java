@@ -34,4 +34,6 @@ public class ActividadPayload {
     private int numeroPersonas;
     @NotNull(message = "Debe ingresar numero de possonas administrativos")
     private int numeroPersonasAdministrativo;
+    @NotNull(message = "Debe ingresar el id del usuario")
+    private int usuarioId;
 }

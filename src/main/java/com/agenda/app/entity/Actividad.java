@@ -15,6 +15,10 @@ public class Actividad {
     private Integer id;
 
     @OneToOne
+    @JoinColumn(name = "usua_id")
+    private User usuario;
+
+    @OneToOne
     @JoinColumn(name = "tiac_id")
     private TipoActividad tipoActividad;
 

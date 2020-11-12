@@ -3,11 +3,13 @@ package com.agenda.app.controllers;
 import com.agenda.app.dao.ActividadDao;
 import com.agenda.app.dao.TipoActividadDao;
 import com.agenda.app.dao.TipoResponsableDao;
+import com.agenda.app.dao.UserDao;
 import com.agenda.app.dto.ResponseDto;
 import com.agenda.app.dto.payload.ActividadPayload;
 import com.agenda.app.entity.Actividad;
 import com.agenda.app.entity.TipoActividad;
 import com.agenda.app.entity.TipoResponsable;
+import com.agenda.app.entity.User;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -30,6 +32,9 @@ public class ActividadController {
     @Autowired
     private TipoResponsableDao tipoResponsableDao;
 
+    @Autowired
+    private UserDao userDao;
+
     @GetMapping("/all")
     public ResponseDto<List<Actividad>> findAll() {
         return ResponseDto.ok(actividadDao.findAll()) ;
@@ -37,11 +42,25 @@ public class ActividadController {
 
     @PostMapping("/create")
     public ResponseDto<String> create(@Valid @RequestBody ActividadPayload actividadPayload) {
+        return save(actividadPayload);
+    }
+
+    @PostMapping("/edit")
+    public ResponseDto<String> edit(@Valid @RequestBody ActividadPayload actividadPayload) {
+        Actividad actividad = actividadDao.findById(actividadPayload.getId()).orElse(null);
+        if (actividad == null) {
+            return ResponseDto.ok("No se encontro la actividad en el sistema", false);
+        }
+        return this.save(actividadPayload);
+    }
+
+    private ResponseDto<String> save(ActividadPayload actividadPayload) {
+        User user = userDao.findById(actividadPayload.getUsuarioId()).orElse(null);
         TipoActividad tipoActividad = tipoActividadDao.findById(actividadPayload.getTipoActividadId())
                 .orElse(null);
         TipoResponsable tipoResponsable = tipoResponsableDao.findById(actividadPayload.getTipoResponsableId())
                 .orElse(null);
-        if (tipoActividad == null || tipoResponsable == null) {
+        if (tipoActividad == null || tipoResponsable == null || user == null) {
             return ResponseDto.ok("Datos incorrectos: tipoResponsableId o tipoActividadId", false);
         }
         Actividad actividad = new Actividad();
