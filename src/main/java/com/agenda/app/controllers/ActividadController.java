@@ -1,27 +1,29 @@
 package com.agenda.app.controllers;
 
-import com.agenda.app.dao.ActividadDao;
-import com.agenda.app.dao.TipoActividadDao;
-import com.agenda.app.dao.TipoResponsableDao;
-import com.agenda.app.dao.UserDao;
+import com.agenda.app.dao.*;
 import com.agenda.app.dto.ResponseDto;
 import com.agenda.app.dto.payload.ActividadPayload;
-import com.agenda.app.entity.Actividad;
-import com.agenda.app.entity.TipoActividad;
-import com.agenda.app.entity.TipoResponsable;
-import com.agenda.app.entity.User;
+import com.agenda.app.entity.*;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 @Log4j2
 @RestController
 @RequestMapping("/actividad")
 @CrossOrigin("*")
 public class ActividadController {
+
+    @Autowired
+    private PaqueteDao paqueteDao;
 
     @Autowired
     private ActividadDao actividadDao;
@@ -60,10 +62,18 @@ public class ActividadController {
                 .orElse(null);
         TipoResponsable tipoResponsable = tipoResponsableDao.findById(actividadPayload.getTipoResponsableId())
                 .orElse(null);
-        if (tipoActividad == null || tipoResponsable == null || user == null) {
+        Paquete paquete = paqueteDao.findById(actividadPayload.getPaqueteId()).orElse(null);
+        if (tipoActividad == null || tipoResponsable == null || user == null || paquete == null) {
+            log.info(tipoActividad);
+            log.info(tipoResponsable);
+            log.info(user);
+            log.info(paquete);
             return ResponseDto.ok("Datos incorrectos: tipoResponsableId o tipoActividadId", false);
         }
         Actividad actividad = new Actividad();
+        actividad.setPaquete(paquete);
+        actividad.setUsuario(user);
+        actividad.setNombre(actividadPayload.getNombre());
         actividad.setTipoActividad(tipoActividad);
         actividad.setTipoResponsable(tipoResponsable);
         actividad.setNombreResponsable(actividadPayload.getNombreResponsable());
@@ -74,8 +84,20 @@ public class ActividadController {
         actividad.setNumeroDocentes(actividadPayload.getNumeroDocentes());
         actividad.setNumeroPersonas(actividadPayload.getNumeroPersonas());
         actividad.setNumeroPersonasAdministrativo(actividadPayload.getNumeroPersonasAdministrativo());
+        actividad.setFecha(fechaRecibe(actividadPayload.getFecha()));
+        actividad.setFechaRegistro(new Date());
         actividadDao.save(actividad);
         return ResponseDto.ok("Registro Actividad con éxito.");
     }
 
+    private Date fechaRecibe(String fecha) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date fechaA = null;
+        try {
+            fechaA = simpleDateFormat.parse(fecha);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return fechaA;
+    }
 }

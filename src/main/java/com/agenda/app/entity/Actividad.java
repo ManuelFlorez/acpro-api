@@ -4,6 +4,7 @@ package com.agenda.app.entity;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Data
 @Table(name = "actividad")
@@ -19,12 +20,19 @@ public class Actividad {
     private User usuario;
 
     @OneToOne
+    @JoinColumn(name = "paqu_id")
+    private Paquete paquete;
+
+    @OneToOne
     @JoinColumn(name = "tiac_id")
     private TipoActividad tipoActividad;
 
     @OneToOne
     @JoinColumn(name = "tire_id")
     private TipoResponsable tipoResponsable;
+
+    @Column(name = "acti_nombre")
+    private String nombre;
 
     @Column(name = "acti_nombre_responsable")
     private String nombreResponsable;
@@ -50,4 +58,9 @@ public class Actividad {
     @Column(name = "acti_numero_personal_administrativo")
     private Integer numeroPersonasAdministrativo;
 
+    @Column(name = "acti_fecha")
+    private Date fecha;
+
+    @Column(name = "acti_reg_date")
+    private Date fechaRegistro;
 }
