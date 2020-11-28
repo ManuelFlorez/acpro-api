@@ -37,6 +37,16 @@ public class ActividadController {
     @Autowired
     private UserDao userDao;
 
+    @DeleteMapping("/delete/{actividadId}")
+    public ResponseDto delete(@PathVariable(value = "actividadId") Integer actividadId) {
+        Actividad actividad = actividadDao.findById(actividadId).orElse(null);
+        if (actividad != null) {
+            actividadDao.delete(actividad);
+            return ResponseDto.ok("Se elimino la actividad");
+        }
+        return ResponseDto.ok("Error al eliminar la actividad", false);
+    }
+
     @GetMapping("/all/{userId}")
     public ResponseDto<List<Actividad>> findAll(@PathVariable(value = "userId") Integer userId) {
         User user = userDao.findById(userId).orElse(null);
