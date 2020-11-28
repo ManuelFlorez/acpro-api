@@ -37,9 +37,25 @@ public class ActividadController {
     @Autowired
     private UserDao userDao;
 
-    @GetMapping("/all")
-    public ResponseDto<List<Actividad>> findAll() {
-        return ResponseDto.ok(actividadDao.findAll()) ;
+    @GetMapping("/all/{userId}")
+    public ResponseDto<List<Actividad>> findAll(@PathVariable(value = "userId") Integer userId) {
+        User user = userDao.findById(userId).orElse(null);
+        if (user != null) {
+            if (user.getRol().equals("administrador")) {
+                List lista = limpiar((List<Actividad>) actividadDao.findAll());
+                return ResponseDto.ok(lista);
+            }
+            List lista = limpiar((List<Actividad>) actividadDao.findByUsuario(user));
+            return ResponseDto.ok(lista);
+        }
+        return ResponseDto.ok("No se identifico el usuario", false) ;
+    }
+
+    private List limpiar(List<Actividad> lista) {
+        for (Actividad actividad : lista) {
+            actividad.setUsuario(null);
+        }
+        return lista;
     }
 
     @PostMapping("/create")
