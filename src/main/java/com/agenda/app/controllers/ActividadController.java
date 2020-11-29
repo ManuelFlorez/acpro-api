@@ -90,22 +90,18 @@ public class ActividadController {
                 .orElse(null);
         Paquete paquete = paqueteDao.findById(actividadPayload.getPaqueteId()).orElse(null);
         if (tipoActividad == null || tipoResponsable == null || user == null || paquete == null) {
-            log.info(tipoActividad);
-            log.info(tipoResponsable);
-            log.info(user);
-            log.info(paquete);
             return ResponseDto.ok("Datos incorrectos: tipoResponsableId o tipoActividadId", false);
         }
         Actividad actividad = new Actividad();
         actividad.setPaquete(paquete);
         actividad.setUsuario(user);
-        actividad.setNombre(actividadPayload.getNombre());
+        actividad.setNombre(actividadPayload.getNombre().toUpperCase());
         actividad.setTipoActividad(tipoActividad);
         actividad.setTipoResponsable(tipoResponsable);
-        actividad.setNombreResponsable(actividadPayload.getNombreResponsable());
-        actividad.setDescripcion(actividadPayload.getDescripcion());
-        actividad.setCiudad(actividadPayload.getCiudad());
-        actividad.setPais(actividadPayload.getPais());
+        actividad.setNombreResponsable(actividadPayload.getNombreResponsable().toUpperCase());
+        actividad.setDescripcion(actividadPayload.getDescripcion().toUpperCase());
+        actividad.setCiudad(actividadPayload.getCiudad().toUpperCase());
+        actividad.setPais(actividadPayload.getPais().toUpperCase());
         actividad.setNumeroEstudiantes(actividadPayload.getNumeroEstudiantes());
         actividad.setNumeroDocentes(actividadPayload.getNumeroDocentes());
         actividad.setNumeroPersonas(actividadPayload.getNumeroPersonas());

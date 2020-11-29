@@ -29,7 +29,7 @@ public class PaqueteController {
             return ResponseDto.ok("debe ingresar el nombre del paquete", false);
         }
         Paquete paqueteEnity = new Paquete();
-        paqueteEnity.setNombre(paquete);
+        paqueteEnity.setNombre(paquete.toUpperCase());
         paqueteDao.save(paqueteEnity);
         return ResponseDto.ok(paqueteDao.findAll());
     }

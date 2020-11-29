@@ -40,11 +40,11 @@ public class UserController {
             return ResponseDto.ok("Ya esta registrado este email: " + usuarioRegistro.getCorreo(), false);
         }
         user = new User();
-        user.setCorreo(usuarioRegistro.getCorreo());
+        user.setCorreo(usuarioRegistro.getCorreo().toUpperCase());
         user.setClave(usuarioRegistro.getClave());
         user.setCodigo("");
-        user.setRol(usuarioRegistro.getTipoUsuario());
-        user.setEstado("activo");
+        user.setRol(usuarioRegistro.getTipoUsuario().toUpperCase());
+        user.setEstado("ACTIVO");
         userDao.save(user);
         return ResponseDto.ok("se ha creado el nuevo usuario");
     }

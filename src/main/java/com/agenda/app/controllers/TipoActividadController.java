@@ -29,7 +29,7 @@ public class TipoActividadController {
             return ResponseDto.ok("debe ingresar el nombre de la actividad", false);
         }
         TipoActividad tipoActividad = new TipoActividad();
-        tipoActividad.setNombre(actividad);
+        tipoActividad.setNombre(actividad.toUpperCase());
         tipoActividadDao.save(tipoActividad);
         return ResponseDto.ok(tipoActividadDao.findAll());
     }

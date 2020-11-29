@@ -28,7 +28,7 @@ public class TipoResponsableController {
             return ResponseDto.ok("debe ingresar el nombre de responsable", false);
         }
         TipoResponsable tipoResponsable = new TipoResponsable();
-        tipoResponsable.setNombre(responsable);
+        tipoResponsable.setNombre(responsable.toUpperCase());
         tipoResponsableDao.save(tipoResponsable);
         return ResponseDto.ok(tipoResponsableDao.findAll());
     }
